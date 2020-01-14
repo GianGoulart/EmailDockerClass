@@ -1,0 +1,28 @@
+version: '3'
+volumes:
+  dados:
+services:
+  db:
+    image: postgres:11.6
+    volumes:
+      # Data's Volume
+      - dados:/var/lib/postgresql/data
+      # Scripts
+      - ./scripts:/scripts
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql 
+  frontend:
+    image: nginx:1.16
+    volumes:
+      #Site
+      - ./web:/usr/share/nginx/html
+    ports:
+      - 80:80
+  app:
+    image: node:10.18
+    volumes:
+      - ./app:app/
+    working_dir: /app
+    command:  bash -c "cd /app && npm i && node app"
+    ports: 
+      - 8080:8080
+      
