@@ -14,13 +14,15 @@ services:
     image: nginx:1.16
     volumes:
       #Site
-      - ./web:/usr/share/nginx/html
+      - ./web:/usr/share/nginx/html/
+      #Settings proxy revers
+      - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     ports:
       - 80:80
   app:
     image: node:10.18
     volumes:
-      - ./app:app/
+      - ./app:/app
     working_dir: /app
     command:  bash -c "cd /app && npm i && node app"
     ports: 
