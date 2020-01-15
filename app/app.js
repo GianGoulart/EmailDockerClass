@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const app = express()
 const port = 8080
+const {Client} = require('pg')
+
 
 app.use(bodyParser.json())
 app.use(
@@ -10,9 +12,22 @@ app.use(
   })
 )
 
+const client = new Client({
+  user: 'postgres',
+  host: 'db',
+  database: 'email_sender'
+})
+
+client.connect()
+
 app.post('/', (request, response) => {
     var subject = request.body.subject
     var message = request.body.message
+
+    client.query(`INSERT INTO emails (subject, message) VALUES('${subject}', '${message}')`, (err, res) => {
+      console.log(err, res)
+      client.end()
+    })
 
     response.json({ message: `Message has been sent \n Subject: ${subject}, \n Message:${message}` })
 })
