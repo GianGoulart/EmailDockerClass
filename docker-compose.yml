@@ -36,7 +36,7 @@ services:
     working_dir: /app
     command:  bash -c "cd /app && npm i && node app"
     ports: 
-      - 8080:8080
+      - 8080:8080 
     networks:
       - database
       - web
@@ -49,12 +49,12 @@ services:
     networks:
       - fila
   worker:
-    image: golang:1.12
+    image: python:3.6
     volumes:
       #Worker
       - ./worker:/worker
     working_dir: /worker
-    command: bash -c "cd /worker && go mod download && go run main.go
+    command: bash ./app.sh
     networks:
       - fila
     depends_on:
