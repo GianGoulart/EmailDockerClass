@@ -31,7 +31,7 @@ app.post('/', (request, response) => {
       client.end()
     })
     const msg = {Subject: subject, Message:message}
-    queue.rpush('sender',msg)    
+    queue.rpush('sender',msg.toString())    
     response.json({ message: `Message has been sent \n Subject: ${subject}, \n Message:${message}` })
 })
 
