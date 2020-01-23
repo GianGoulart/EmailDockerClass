@@ -27,11 +27,12 @@ app.post('/', (request, response) => {
     var message = request.body.message
 
     client.query(`INSERT INTO emails (subject, message) VALUES('${subject}', '${message}')`, (err, res) => {
-      console.log(err, res)
       client.end()
     })
-    const msg = {Subject: subject, Message:message}
-    queue.rpush('sender',msg.toString())    
+    var msg = {Subject: subject, Message:message}
+    msg = JSON.stringify(msg)
+    console.log(msg)
+    queue.rpush('sender',msg)    
     response.json({ message: `Message has been sent \n Subject: ${subject}, \n Message:${message}` })
 })
 
